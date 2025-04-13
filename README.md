@@ -37,4 +37,4 @@ npm run dev
 - `app/` - Next.js app directory containing pages and components
 - `app/page.tsx` - Main dashboard page
 - `app/layout.tsx` - Root layout component
-- `app/globals.css` - Global styles and Tailwind CSS imports 
+- `app/globals.css` - Global styles and Tailwind CSS imports // test update
