@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   HeartIcon,
   ChatBubbleLeftIcon,
@@ -11,12 +11,12 @@ import {
   ChartBarIcon,
   AcademicCapIcon,
   BriefcaseIcon,
+  DocumentIcon,
 } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 import Image from 'next/image';
 import Link from 'next/link';
 import TopCoursesGraph from './TopCoursesGraph';
-import { link } from 'fs';
 
 const mockPosts = [
   {
@@ -275,70 +275,70 @@ export default function HomePage() {
           <TopCoursesGraph />
         </main>
 
-        {/* Market Trends Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold mb-4">Hot Skills</h2>
-            <p className="text-sm text-gray-600 mb-4">Python, Data Science, Cloud Computing, Data Visualization, Flutter</p>
-            <button className="text-indigo-600 text-sm">Learn More</button>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold mb-4">Top Locations</h2>
-            <p className="text-sm text-gray-600 mb-4">Berlin, London, New York, London, Singapore</p>
-            <button className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Explore More</button>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold mb-4">Salary Range</h2>
-            <p className="text-sm text-gray-600 mb-4">$75K - $120K based on your Data Analyst role in your region</p>
-            <button className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Salary Details</button>
-          </div>
-        </div>
-
         {/* Smart Tools Section */}
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-semibold mb-4">Smart Tools</h2>
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg cursor-pointer">
-              <Link href="/mock-interview" className="flex items-center space-x-4 w-full">
-                <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600">M</div>
-                <div>
-                  <h3 className="font-medium">Mock Interview Simulator</h3>
-                  <p className="text-sm text-gray-600">Practice with AI-powered interview scenarios</p>
+            <Link href="/mock-interview" className="block">
+              <div className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg cursor-pointer">
+                <div className="flex items-center space-x-4">
+                  <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600">M</div>
+                  <div>
+                    <h3 className="font-medium">Mock Interview Simulator</h3>
+                    <p className="text-sm text-gray-600">Practice with AI-powered interview scenarios</p>
+                  </div>
                 </div>
-              </Link>
-              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </Link>
 
-            <div className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg cursor-pointer">
-              <div className="flex items-center space-x-4">
-                <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600">R</div>
-                <div>
+            <Link href="/resume" className="block">
+              <div className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg cursor-pointer">
+                <div className="flex items-center space-x-4">
+                  <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600">R</div>
+                  <div>
+                    <h3 className="font-medium">Resume Generator</h3>
+                    <p className="text-sm text-gray-600">Create a professional resume in minutes</p>
+                  </div>
+                </div>
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </Link>
+
+            <Link href="/learning-path" className="block">
+              <div className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg cursor-pointer">
+                <div className="flex items-center space-x-4">
+                  <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600">L</div>
+                  <div>
+                    <h3 className="font-medium">Learning Roadmap</h3>
+                    <p className="text-sm text-gray-600">Personalized learning path to reach your goals</p>
+                  </div>
+                </div>
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        {/* Quick Actions Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {/* Resume Generator Card
+          <Link 
+            href="/resume"
+          >
+                  <div>
                   <h3 className="font-medium">Resume Generator</h3>
                   <p className="text-sm text-gray-600">Create a professional resume in minutes</p>
                 </div>
-              </div>
-              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
+          </Link> */}
 
-            <div className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg cursor-pointer">
-              <div className="flex items-center space-x-4">
-                <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600">L</div>
-                <div>
-                  <h3 className="font-medium">Learning Roadmap</h3>
-                  <p className="text-sm text-gray-600">Personalized learning path to reach your goals</p>
-                </div>
-              </div>
-              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
-          </div>
+          {/* Add other quick action cards here */}
         </div>
       </div>
     </div>

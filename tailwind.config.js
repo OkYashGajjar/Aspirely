@@ -7,6 +7,58 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        primary: {
+          DEFAULT: '#4F46E5',
+          dark: '#4338CA',
+          light: '#818CF8',
+        },
+        secondary: {
+          DEFAULT: '#10B981',
+          dark: '#059669',
+          light: '#34D399',
+        },
+        accent: {
+          DEFAULT: '#F59E0B',
+          dark: '#D97706',
+          light: '#FBBF24',
+        },
+        background: {
+          DEFAULT: '#F9FAFB',
+          dark: '#F3F4F6',
+        },
+        foreground: {
+          DEFAULT: '#111827',
+          light: '#374151',
+        },
+      },
+      borderColor: {
+        primary: '#4F46E5',
+        'primary-dark': '#4338CA',
+        'primary-light': '#818CF8',
+        secondary: '#10B981',
+        'secondary-dark': '#059669',
+        'secondary-light': '#34D399',
+        accent: '#F59E0B',
+        'accent-dark': '#D97706',
+        'accent-light': '#FBBF24',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.5s ease-out forwards',
+        'slide-in': 'slideIn 0.5s ease-out forwards',
+        'bounce-slow': 'bounce 3s infinite',
+        'pulse-slow': 'pulse 3s infinite',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        slideIn: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+      },
       fontSize: {
         // Base sizes for different screen sizes
         'xs': ['0.75rem', { lineHeight: '1rem' }],      // 12px
@@ -30,14 +82,6 @@ module.exports = {
         'lg': '1024px',
         'xl': '1280px',
         '2xl': '1536px',
-      },
-      colors: {
-        indigo: {
-          50: '#EEF2FF',
-          100: '#E0E7FF',
-          600: '#4F46E5',
-          700: '#4338CA',
-        },
       },
     },
   },

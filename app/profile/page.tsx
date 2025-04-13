@@ -14,6 +14,10 @@ import {
   CameraIcon,
   CheckCircleIcon,
   ArrowLeftOnRectangleIcon,
+  XMarkIcon,
+  ArrowLeftIcon,
+  ClockIcon,
+  ArrowTopRightOnSquareIcon,
 } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
@@ -108,6 +112,45 @@ export default function ProfilePage() {
     skills: ['React', 'Node.js', 'TypeScript', 'AWS', 'Docker', 'Kubernetes', 'GraphQL', 'MongoDB'],
   });
   const [isVerifyingLinkedIn, setIsVerifyingLinkedIn] = useState(false);
+  const [showRecommendedCourses, setShowRecommendedCourses] = useState(false);
+  const [recommendedCourses, setRecommendedCourses] = useState([
+    {
+      title: "Advanced React Development",
+      provider: "Udemy",
+      duration: "12 hours",
+      link: "https://www.udemy.com/course/react-advanced",
+    },
+    {
+      title: "Node.js Masterclass",
+      provider: "Coursera",
+      duration: "8 weeks",
+      link: "https://www.coursera.org/learn/nodejs",
+    },
+    {
+      title: "TypeScript Fundamentals",
+      provider: "Pluralsight",
+      duration: "6 hours",
+      link: "https://www.pluralsight.com/courses/typescript",
+    },
+    {
+      title: "AWS Cloud Practitioner",
+      provider: "AWS Training",
+      duration: "40 hours",
+      link: "https://www.aws.training/course/cloud-practitioner",
+    },
+    {
+      title: "Docker & Kubernetes",
+      provider: "LinkedIn Learning",
+      duration: "10 hours",
+      link: "https://www.linkedin.com/learning/docker-kubernetes",
+    },
+    {
+      title: "GraphQL API Development",
+      provider: "Frontend Masters",
+      duration: "5 hours",
+      link: "https://frontendmasters.com/courses/graphql",
+    }
+  ]);
 
   useEffect(() => {
     fetchProfile();
@@ -461,16 +504,35 @@ export default function ProfilePage() {
     setIsEditing(true);
   };
 
-  const handleSave = () => {
-    updateProfile();
+  const handleSave = async () => {
+    setIsSaving(true);
+    setSaveError(null);
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Update the profile state
+      setProfile(profile);
+      setOriginalProfile(profile);
+      setIsEditing(false);
+      setSaveSuccess(true);
+      
+      // Hide success message after 3 seconds
+      setTimeout(() => {
+        setSaveSuccess(false);
+      }, 3000);
+    } catch (error) {
+      setSaveError('Failed to save changes. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleCancel = () => {
-    // Restore the original profile data
     if (originalProfile) {
-      setProfile({...originalProfile});
+      setProfile(originalProfile);
     }
-    // Exit edit mode
     setIsEditing(false);
   };
 
@@ -534,12 +596,11 @@ export default function ProfilePage() {
         })),
         skills: linkedInProfile.skills,
         linkedin_access_token: accessToken,
-        // Set token expiration to 60 days from now (LinkedIn tokens typically expire in 60 days)
         linkedin_token_expires_at: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
       };
 
       // Save the updated profile
-      await updateProfile(updatedProfile);
+      await updateProfile();
       setProfile(updatedProfile);
       setOriginalProfile(updatedProfile);
       setSaveSuccess(true);
@@ -579,6 +640,10 @@ export default function ProfilePage() {
     }
   };
 
+  const handleBack = () => {
+    router.back();
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -592,7 +657,9 @@ export default function ProfilePage() {
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-semibold text-gray-900">Profile</h1>
+            <div className="flex items-center">
+              <h1 className="text-2xl font-semibold text-gray-900">Profile</h1>
+            </div>
             <div className="flex space-x-4">
               <button
                 onClick={handleLinkedInConnect}
@@ -621,29 +688,41 @@ export default function ProfilePage() {
                 )}
               </button>
               {isEditing ? (
-                <button
-                  onClick={handleSave}
-                  disabled={isSaving}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  {isSaving ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Saving...
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircleIcon className="h-5 w-5 mr-2" />
-                      Save Changes
-                    </>
-                  )}
-                </button>
+                <div className="flex space-x-3">
+                  <button
+                    onClick={handleCancel}
+                    className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    <XMarkIcon className="h-5 w-5 mr-2" />
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSave}
+                    disabled={isSaving}
+                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    {isSaving ? (
+                      <>
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Saving...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircleIcon className="h-5 w-5 mr-2" />
+                        Save Changes
+                      </>
+                    )}
+                  </button>
+                </div>
               ) : (
                 <button
-                  onClick={() => setIsEditing(true)}
+                  onClick={() => {
+                    setOriginalProfile(profile);
+                    setIsEditing(true);
+                  }}
                   className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   <PencilIcon className="h-5 w-5 mr-2" />
@@ -713,7 +792,8 @@ export default function ProfilePage() {
           {/* Rest of the profile content */}
           <div className="bg-white rounded-xl shadow-sm overflow-hidden">
             {/* Profile Header */}
-            <div className="relative h-48 bg-gradient-to-r from-indigo-500 to-purple-600">
+            <div className="relative h-48 bg-gradient-to-r from-indigo-600 to-purple-600">
+              <div className="absolute inset-0 bg-black bg-opacity-20"></div>
               <div className="absolute top-4 right-4">
                 <button
                   onClick={handleSignOut}
@@ -724,12 +804,18 @@ export default function ProfilePage() {
                 </button>
               </div>
               <div className="absolute -bottom-16 left-8">
-                <div className="relative h-32 w-32 rounded-full border-4 border-white overflow-hidden">
+                <div className="relative h-32 w-32 rounded-full border-4 border-white overflow-hidden bg-gray-100 shadow-lg">
                   <Image
-                    src="/profile-photo.jpg"
-                    alt="Profile"
-                    fill
-                    className="object-cover"
+                    src={`https://picsum.photos/seed/${profile.id || 'default'}/200/200`}
+                    alt="Profile Photo"
+                    width={128}
+                    height={128}
+                    className="object-cover w-full h-full"
+                    priority
+                    onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236B7280'%3E%3Cpath d='M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z'/%3E%3C/svg%3E";
+                    }}
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                     <button className="bg-white rounded-full p-2 shadow-md">
@@ -1152,15 +1238,50 @@ export default function ProfilePage() {
                         </div>
                       </div>
                     ) : (
-                      <div className="flex flex-wrap gap-2">
-                        {profile.skills.map((skill, index) => (
-                          <span
-                            key={index}
-                            className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800"
-                          >
-                            {skill}
-                          </span>
-                        ))}
+                      <div className="space-y-4">
+                        <div className="flex flex-wrap gap-2">
+                          {profile.skills.map((skill, index) => (
+                            <span
+                              key={index}
+                              className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800"
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                        <button
+                          onClick={() => setShowRecommendedCourses(!showRecommendedCourses)}
+                          className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                          <AcademicCapIcon className="h-5 w-5 mr-2" />
+                          View Recommended Courses
+                        </button>
+                        {showRecommendedCourses && (
+                          <div className="mt-4 space-y-4">
+                            <h3 className="text-lg font-medium text-gray-900">Recommended Courses</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              {recommendedCourses.map((course, index) => (
+                                <div key={index} className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                                  <h4 className="font-medium text-gray-900">{course.title}</h4>
+                                  <p className="text-sm text-gray-500 mt-1">{course.provider}</p>
+                                  <div className="mt-2 flex items-center text-sm text-gray-500">
+                                    <ClockIcon className="h-4 w-4 mr-1" />
+                                    {course.duration}
+                                  </div>
+                                  <a
+                                    href={course.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="mt-3 inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                                  >
+                                    View Course
+                                    <ArrowTopRightOnSquareIcon className="h-4 w-4 ml-1" />
+                                  </a>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>

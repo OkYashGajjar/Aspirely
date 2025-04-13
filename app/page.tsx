@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function LandingPage() {
   useEffect(() => {
@@ -15,19 +16,24 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-indigo-50 to-white">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white">
       <div className="text-center">
-        <div className="relative w-48 h-48 mx-auto mb-8 rounded-full overflow-hidden border-4 border-indigo-500 shadow-lg">
+        <div className="relative w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden border border-gray-200">
           <Image
-            src="/profile-photo.jpg"
-            alt="Your Profile Photo"
-            fill
-            style={{ objectFit: 'cover' }}
+            src={`https://picsum.photos/seed/aspirely/200/200`}
+            alt="Aspirely Logo"
+            width={120}
+            height={120}
+            className="object-cover rounded-full"
             priority
           />
         </div>
-        <h1 className="text-4xl font-bold text-indigo-600 mb-2">Welcome to Aspirely</h1>
-        <p className="text-xl text-gray-600">Your Career Development Platform</p>
+        <Link href="/home">
+          <h1 className="text-3xl font-medium text-gray-900 mb-2 hover:text-primary transition-colors duration-300 cursor-pointer">
+            Welcome to Aspirely
+          </h1>
+        </Link>
+        <p className="text-lg text-gray-600">Your Career Development Platform</p>
       </div>
     </div>
   );
