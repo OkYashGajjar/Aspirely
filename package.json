@@ -1,0 +1,40 @@
+{
+  "name": "aspirely",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "setup-db": "node scripts/setup-database.js",
+    "setup-env": "node setup-env.js"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.1.1",
+    "@supabase/auth-helpers-nextjs": "^0.10.0",
+    "@supabase/supabase-js": "^2.49.4",
+    "@syncfusion/ej2-base": "^29.1.36",
+    "@syncfusion/ej2-react-charts": "^29.1.35",
+    "@types/node": "^20.11.16",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
+    "apexcharts": "^4.5.0",
+    "autoprefixer": "^10.4.17",
+    "lucide-react": "^0.487.0",
+    "next": "14.1.0",
+    "postcss": "^8.4.35",
+    "react": "^18.2.0",
+    "react-apexcharts": "^1.7.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^5.0.1",
+    "recharts": "^2.15.2",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3"
+  },
+  "description": "A modern web application that helps users manage their career development, track learning progress, and get personalized career advice.",
+  "main": "postcss.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,12 @@
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    domains: ['via.placeholder.com'],
+  },
+  reactStrictMode: true,
+  env: {
+    // You can add default values here, but it's better to use .env.local for secrets
+  },
+}
+
+module.exports = nextConfig 
